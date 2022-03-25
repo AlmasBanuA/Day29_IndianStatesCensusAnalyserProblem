@@ -1,7 +1,7 @@
 package com.da29;
 
 /**
- * TC1.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
+ * TC1.4:- Given the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
  */
 import static org.junit.Assert.*;
 import java.io.IOException;
@@ -15,6 +15,7 @@ public class StateCensusAnalyzerTest {
 
 	private final String CENSUS_CSV_PATH = "C:\Users\user\Desktop\CSV\IndiaStateCensusData.csv";
 	private final String INAVLID_CENSUS_CSV_PATH = "IndiaStateCensusData.csv";
+	private final String INVALID_CENSUS_CSV_DELIM="C:\Users\user\Desktop\CSV\IndiaStateCensusDataInvalidDelim.csv";
 	private StateCensusAnalyzer analyser;
 
 	/**
@@ -36,7 +37,7 @@ public class StateCensusAnalyzerTest {
 	 */
 	public void givenCensusCSVFile_ReturnsCorrectNoOfEntries() throws IOException {
 		int stateCount = analyser.readCSVData();
-		assertEquals(29, stateCount);
+		assertEquals(28, stateCount);
 	}
 
 	@Test
@@ -52,4 +53,18 @@ public class StateCensusAnalyzerTest {
 			assertEquals(StateAnalyzerException.ExceptionType.INVALID_FILE_PATH, e.type);
 		}
 	}
+	
+	@Test
+	/**
+	 * method created for the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
+	 */
+	public void givenIncorrectDelimiter_ThrowsCustomExceptionInvalidDelimiter(){
+		try {
+			analyser.readCSVData(INVALID_CENSUS_CSV_DELIM);
+		} catch (StateAnalyzerException e) {
+			e.printStackTrace();
+			assertEquals(StateAnalyzerException.ExceptionType.INVALID_DELIM, e.type);
+		}
+	}
 }
+
