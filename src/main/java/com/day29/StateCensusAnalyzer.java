@@ -6,6 +6,7 @@ import java.io.IOException;
  * UC1:-   Ability for the analyser to load the Indian States Census Information from a csv file 
  * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
  * TC1.2:- Given the State Census CSV File if incorrect Returns a custom Exception
+ * TC1.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
  */
 
 import java.io.IOException;
@@ -40,9 +41,15 @@ public class StateCensusAnalyzer {
 				throw new StateAnalyzerException("Inavlid Path Name", ExceptionType.INVALID_FILE_PATH);
 			}
 			Reader reader = Files.newBufferedReader(Paths.get(FilePath));
-			CsvToBean<CSVStateCensus> csvToBean = new CsvToBeanBuilder<CSVStateCensus>(reader)
-					.withIgnoreLeadingWhiteSpace(true).withSkipLines(1).withType(CSVStateCensus.class).build();
+			CsvToBeanBuilder<CSVStateCensus> csvToBeanBuilder = new CsvToBeanBuilder<CSVStateCensus>(reader);
 
+			try {
+				csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true).withSkipLines(1).withType(CSVStateCensus.class);
+			} catch (IllegalStateException exception) {
+				throw new StateAnalyzerException("Invalid Class Type.", ExceptionType.INVALID_CLASS_TYPE);
+			}
+
+			CsvToBean<CSVStateCensus> csvToBean = csvToBeanBuilder.build();
 			/**
 			 * An Iterator is an object that can be used to loop through collections, like
 			 * ArrayList and HashSet. It is called an "iterator" because "iterating" is the

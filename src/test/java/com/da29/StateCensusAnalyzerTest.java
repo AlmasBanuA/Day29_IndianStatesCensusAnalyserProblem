@@ -1,17 +1,20 @@
 package com.da29;
 
 /**
- * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
+ * TC1.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
  */
 import static org.junit.Assert.*;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.day29.StateAnalyzerException;
 import com.day29.StateCensusAnalyzer;
 
 public class StateCensusAnalyzerTest {
 
+	private final String CENSUS_CSV_PATH = "C:\Users\user\Desktop\CSV\IndiaStateCensusData.csv";
+	private final String INAVLID_CENSUS_CSV_PATH = "IndiaStateCensusData.csv";
 	private StateCensusAnalyzer analyser;
 
 	/**
@@ -34,5 +37,19 @@ public class StateCensusAnalyzerTest {
 	public void givenCensusCSVFile_ReturnsCorrectNoOfEntries() throws IOException {
 		int stateCount = analyser.readCSVData();
 		assertEquals(29, stateCount);
+	}
+
+	@Test
+	/**
+	 * method created when given incorrect csv file path it will throws custom
+	 * exception invalid File Path
+	 */
+	public void givenIncorrectCSVFilePath_ThrowsCustomExceptionInvalidFilePath() {
+		try {
+			analyser.readCSVData(INAVLID_CENSUS_CSV_PATH);
+		} catch (StateAnalyzerException e) {
+			e.printStackTrace();
+			assertEquals(StateAnalyzerException.ExceptionType.INVALID_FILE_PATH, e.type);
+		}
 	}
 }
