@@ -2,8 +2,11 @@ package com.da29;
 
 /**
  * UC2:-   Ability for the analyser to load the Indian States Code Information from a csv
+ * TC2.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
+ * TC2.2:- Given the State Census CSV File if incorrect Returns a custom Exception
+ * TC2.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
+ * TC2.4:- Given the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
  * TC2.5:- Given the State Census CSV File when correct but csv header incorrect Returns a custom Exception
-
  */
 import static org.junit.Assert.*;
 import org.junit.Before;
