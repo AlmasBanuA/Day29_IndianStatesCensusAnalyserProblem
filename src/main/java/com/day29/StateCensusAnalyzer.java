@@ -1,8 +1,11 @@
 package com.day29;
 
+import java.io.IOException;
+
 /**
  * UC1:-   Ability for the analyser to load the Indian States Census Information from a csv file 
  * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
+ * TC1.2:- Given the State Census CSV File if incorrect Returns a custom Exception
  */
 
 import java.io.IOException;
@@ -10,28 +13,33 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
-import com.day29.CSVStateCensus;
+
+import com.day29.exception.StateAnalyzerException;
+import com.day29.exception.StateAnalyzerException.ExceptionType;
+import com.day29.model.CSVStateCensus;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 public class StateCensusAnalyzer {
 
-	private final String CENSUS_CSV_PATH = "C:\Users\user\Desktop\CSV\IndiaStateCensusData.csv";
-
 	/**
 	 * create method readCSVData that reads the data from csv file
 	 * 
-	 * @return -return to method created
 	 * @throws IOException -throws exception
 	 */
-	public int readCSVData() throws IOException {
+	public int readCSVData(String FilePath) throws StateAnalyzerException {
 		int count = 0;
 
 		/**
-		 * taking try and Catch block to handle the exceptions
+		 * taking try and Catch block to handle the catch exceptions
 		 */
 		try {
-			Reader reader = Files.newBufferedReader(Paths.get(CENSUS_CSV_PATH));
+			try {
+				Files.newBufferedReader(Paths.get(FilePath));
+			} catch (IOException exception) {
+				throw new StateAnalyzerException("Inavlid Path Name", ExceptionType.INVALID_FILE_PATH);
+			}
+			Reader reader = Files.newBufferedReader(Paths.get(FilePath));
 			CsvToBean<CSVStateCensus> csvToBean = new CsvToBeanBuilder<CSVStateCensus>(reader)
 					.withIgnoreLeadingWhiteSpace(true).withSkipLines(1).withType(CSVStateCensus.class).build();
 
