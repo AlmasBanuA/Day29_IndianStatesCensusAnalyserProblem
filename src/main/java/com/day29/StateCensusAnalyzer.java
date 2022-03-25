@@ -7,7 +7,8 @@ import java.io.IOException;
  * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
  * TC1.2:- Given the State Census CSV File if incorrect Returns a custom Exception
  * TC1.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
- * TC1.4:_ Given the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
+ * TC1.4:- Given the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
+ * TC1.5:- Given the State Census CSV File when correct but csv header incorrect Returns a custom Exception
  */
 
 import java.io.BufferedReader;
@@ -31,7 +32,7 @@ public class StateCensusAnalyzer {
 	 * @throws IOException -throws exception
 	 */
 	public int readCSVData(String FilePath) throws StateAnalyzerException {
-
+		
 		/**
 		 * taking try and Catch block to handle the catch exceptions
 		 */
@@ -51,16 +52,27 @@ public class StateCensusAnalyzer {
 			Iterable<CSVStateCensus> csvItrable = () -> csvIterator;
 			int count = (int) StreamSupport.stream(csvItrable.spliterator(), false).count();
 
-			/**
-			 * Check delimitor
-			 */
 			BufferedReader br = new BufferedReader(reader);
-			boolean flagCorrectDelim = true;
-
+			
 			/**
 			 * To loop through a collection, use the hasNext() and next() methods of the
 			 * Iterator
+			 * Check header
 			 */
+			while (br.readLine() != null) {
+				String[] head = br.readLine().split(",");
+				boolean flagCorrectHead = head[0] == "State" && head[1] == "Population" && head[2] == "AreaInSqKm"
+						&& head[3] == "DensityPerSqKm";
+				if (!flagCorrectHead) {
+					throw new StateAnalyzerException("Invalid Headers", ExceptionType.INVALID_HEAD);
+				}
+				break;
+			}
+
+			/**
+			 *  Check delimitor
+			 */
+			boolean flagCorrectDelim = true;
 			while (br.readLine() != null) {
 				if (!br.readLine().contains(",")) {
 					flagCorrectDelim = false;
