@@ -1,7 +1,8 @@
 package com.day29;
 
 /**
- * UC1:- Ability for the analyser to load the Indian States Census Information from a csv file 
+ * UC1:-   Ability for the analyser to load the Indian States Census Information from a csv file 
+ * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
  */
 
 import java.io.IOException;
@@ -9,9 +10,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
-
 import com.day29.CSVStateCensus;
-import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -22,12 +21,14 @@ public class StateCensusAnalyzer {
 	/**
 	 * create method readCSVData that reads the data from csv file
 	 * 
+	 * @return -return to method created
 	 * @throws IOException -throws exception
 	 */
-	public void readCSVData() throws IOException {
+	public int readCSVData() throws IOException {
+		int count = 0;
 
 		/**
-		 * taking try and Catch block to handle the catch exceptions
+		 * taking try and Catch block to handle the exceptions
 		 */
 		try {
 			Reader reader = Files.newBufferedReader(Paths.get(CENSUS_CSV_PATH));
@@ -46,13 +47,15 @@ public class StateCensusAnalyzer {
 			 * Iterator
 			 */
 			while (csvIterator.hasNext()) {
+				count++;
 				CSVStateCensus csvData = csvIterator.next();
 				System.out.println(csvData);
 			}
+			return count;
 
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
-
+		return 0;
 	}
 }
