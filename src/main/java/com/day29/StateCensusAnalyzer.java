@@ -15,6 +15,8 @@ import java.io.IOException;
  * TC2.2:- Given the State Census CSV File if incorrect Returns a custom Exception
  * TC2.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
  * TC2.4:- Given the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
+ * TC2.5:- Given the State Census CSV File when correct but csv header incorrect Returns a custom Exception
+
  */
 
 import java.io.BufferedReader;
@@ -115,6 +117,35 @@ public class StateCensusAnalyzer {
 
 			Iterable<CSVStates> csvItrable = () -> csvIterator;
 			int count = (int) StreamSupport.stream(csvItrable.spliterator(), false).count();
+
+			BufferedReader br = new BufferedReader(reader);
+
+			/**
+			 * Check Header
+			 */
+			while (br.readLine() != null) {
+				String[] head = br.readLine().split(",");
+				boolean flagCorrectHead = head[0] == "SrNo" && head[1] == "State Name" && head[2] == "TIN"
+						&& head[3] == "StateCode";
+				if (!flagCorrectHead) {
+					throw new StateAnalyzerException("Invalid Headers", ExceptionType.INVALID_HEAD);
+				}
+				break;
+			}
+
+			/**
+			 * Check delimitor
+			 */
+			boolean flagCorrectDelim = true;
+			while (br.readLine() != null) {
+				if (!br.readLine().contains(",")) {
+					flagCorrectDelim = false;
+				}
+			}
+			if (!flagCorrectDelim) {
+				throw new StateAnalyzerException("Invalid Delimitor", ExceptionType.INVALID_DELIM);
+			}
+
 			return count;
 		} catch (IOException exception) {
 			throw new StateAnalyzerException("Invalid Path Name", ExceptionType.INVALID_FILE_PATH);
