@@ -2,7 +2,7 @@ package com.da29;
 
 /**
  * UC2:-   Ability for the analyser to load the Indian States Code Information from a csv
- * TC2.2:- Given the State Census CSV File if incorrect Returns a custom Exception
+ * TC2.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
  */
 import static org.junit.Assert.*;
 import org.junit.Before;
