@@ -2,7 +2,7 @@ package com.da29;
 
 /**
  * UC2:-   Ability for the analyser to load the Indian States Code Information from a csv
- * TC2.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
+ * TC2.4:- Given the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
  */
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -23,6 +23,7 @@ public class StateCensusAnalyzerTest {
 	 */
 	private final String STATECODE_CSV_PATH="C:\Users\user\Desktop\CSV\IndianStateCode.csv";
 	private final String INVALID_STATECODE_CSV_PATH="IndiaStateCode.csv";
+	private final String INVALID_STATECODE_CSV_DELIM="C:\Users\user\Desktop\CSV\IndianStateCode.csv";
 	private StateCensusAnalyzer analyser;
 
 	/**
@@ -115,5 +116,17 @@ public class StateCensusAnalyzerTest {
 				e.printStackTrace();
 				assertEquals(StateAnalyzerException.ExceptionType.INVALID_FILE_PATH, e.type);
 			}
+			
+			@Test
+			/**
+			 * method created for the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
+			 */
+			public void givenIncorrectDelimiter_ThrowsCustomExceptionInvalidDelimiter2(){
+				try {
+					analyser.readStateCodeCSVData(INVALID_STATECODE_CSV_DELIM);
+				} catch (StateAnalyzerException e) {
+					e.printStackTrace();
+					assertEquals(StateAnalyzerException.ExceptionType.INVALID_DELIM, e.type);
+				}
 		}
 }

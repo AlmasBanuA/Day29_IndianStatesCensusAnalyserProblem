@@ -14,6 +14,7 @@ import java.io.IOException;
  * TC2.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
  * TC2.2:- Given the State Census CSV File if incorrect Returns a custom Exception
  * TC2.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
+ * TC2.4:- Given the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
  */
 
 import java.io.BufferedReader;
