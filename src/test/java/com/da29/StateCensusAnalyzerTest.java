@@ -2,7 +2,7 @@ package com.da29;
 
 /**
  * UC2:-   Ability for the analyser to load the Indian States Code Information from a csv
- * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
+ * TC2.2:- Given the State Census CSV File if incorrect Returns a custom Exception
  */
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -22,6 +22,7 @@ public class StateCensusAnalyzerTest {
 	 * Paths for State Code Files
 	 */
 	private final String STATECODE_CSV_PATH="C:\Users\user\Desktop\CSV\IndianStateCode.csv";
+	private final String INVALID_STATECODE_CSV_PATH="IndiaStateCode.csv";
 	private StateCensusAnalyzer analyser;
 
 	/**
@@ -100,5 +101,19 @@ public class StateCensusAnalyzerTest {
 		public void givenCodeCSVFileReturnsCorrectNoOfEntries(){
 			int stateCount = analyser.readStateCodeCSVData(STATECODE_CSV_PATH);
 			assertEquals(36, stateCount);
+		}
+		
+		@Test
+		/**
+		 * method created when given incorrect csv file path it will throws custom
+		 * exception invalid File Path
+		 */
+		public void givenIncorrectCSVFilePath_ThrowsCustomExceptionInvalidFilePath2(){
+			try {
+				analyser.readStateCodeCSVData(INVALID_STATECODE_CSV_PATH);
+			} catch (StateAnalyzerException e) {
+				e.printStackTrace();
+				assertEquals(StateAnalyzerException.ExceptionType.INVALID_FILE_PATH, e.type);
+			}
 		}
 }

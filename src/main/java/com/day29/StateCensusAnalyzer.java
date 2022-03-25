@@ -11,7 +11,8 @@ import java.io.IOException;
  * TC1.5:- Given the State Census CSV File when correct but csv header incorrect Returns a custom Exception
  * 
  * UC2:-   Ability for the analyser to load the Indian States Code Information from a csv
- * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
+ * TC2.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
+ * TC2.2:- Given the State Census CSV File if incorrect Returns a custom Exception
  */
 
 import java.io.BufferedReader;
@@ -113,9 +114,8 @@ public class StateCensusAnalyzer {
 			Iterable<CSVStates> csvItrable = () -> csvIterator;
 			int count = (int) StreamSupport.stream(csvItrable.spliterator(), false).count();
 			return count;
-		} catch (Exception exception) {
-			exception.printStackTrace();
+		} catch (IOException exception) {
+			throw new StateAnalyzerException("Invalid Path Name", ExceptionType.INVALID_FILE_PATH);
 		}
-		return 0;
 	}
 }
