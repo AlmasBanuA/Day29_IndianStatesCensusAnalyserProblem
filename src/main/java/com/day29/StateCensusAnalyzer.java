@@ -9,6 +9,9 @@ import java.io.IOException;
  * TC1.3:- Given the State Census CSV File when correct but type incorrect Returns a custom Exception
  * TC1.4:- Given the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
  * TC1.5:- Given the State Census CSV File when correct but csv header incorrect Returns a custom Exception
+ * 
+ * UC2:-   Ability for the analyser to load the Indian States Code Information from a csv
+ * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
  */
 
 import java.io.BufferedReader;
@@ -21,18 +24,19 @@ import java.util.stream.StreamSupport;
 import com.day29.exception.StateAnalyzerException;
 import com.day29.exception.StateAnalyzerException.ExceptionType;
 import com.day29.model.CSVStateCensus;
+import com.day29.model.CSVStates;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 public class StateCensusAnalyzer {
 
 	/**
-	 * create method readCSVData that reads the data from csv file
+	 * create method readStateCSVData that reads the State data from csv file
 	 * 
 	 * @throws IOException -throws exception
 	 */
-	public int readCSVData(String FilePath) throws StateAnalyzerException {
-		
+	public int readStateCensusCSVData(String FilePath) throws StateAnalyzerException {
+
 		/**
 		 * taking try and Catch block to handle the catch exceptions
 		 */
@@ -53,11 +57,10 @@ public class StateCensusAnalyzer {
 			int count = (int) StreamSupport.stream(csvItrable.spliterator(), false).count();
 
 			BufferedReader br = new BufferedReader(reader);
-			
+
 			/**
 			 * To loop through a collection, use the hasNext() and next() methods of the
-			 * Iterator
-			 * Check header
+			 * Iterator Check header
 			 */
 			while (br.readLine() != null) {
 				String[] head = br.readLine().split(",");
@@ -70,7 +73,7 @@ public class StateCensusAnalyzer {
 			}
 
 			/**
-			 *  Check delimitor
+			 * Check delimitor
 			 */
 			boolean flagCorrectDelim = true;
 			while (br.readLine() != null) {
@@ -85,9 +88,34 @@ public class StateCensusAnalyzer {
 			return count;
 
 		} catch (IOException exception) {
-			throw new StateAnalyzerException("Inavlid Path Name", ExceptionType.INVALID_FILE_PATH);
+			throw new StateAnalyzerException("Invalid Path Name", ExceptionType.INVALID_FILE_PATH);
 		} catch (IllegalStateException exception) {
 			throw new StateAnalyzerException("Invalid Class Type.", ExceptionType.INVALID_CLASS_TYPE);
 		}
+	}
+
+	/**
+	 * method to readStateCSV data from the csv file
+	 * 
+	 * @param FilePath -pass csv file path
+	 * @return -return to method created
+	 */
+	public int readStateCodeCSVData(String FilePath) {
+
+		try {
+			Files.newBufferedReader(Paths.get(FilePath));
+			Reader reader = Files.newBufferedReader(Paths.get(FilePath));
+			CsvToBean<CSVStates> csvToBean = new CsvToBeanBuilder<CSVStates>(reader).withIgnoreLeadingWhiteSpace(true)
+					.withSkipLines(1).withType(CSVStates.class).build();
+
+			Iterator<CSVStates> csvIterator = csvToBean.iterator();
+
+			Iterable<CSVStates> csvItrable = () -> csvIterator;
+			int count = (int) StreamSupport.stream(csvItrable.spliterator(), false).count();
+			return count;
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return 0;
 	}
 }

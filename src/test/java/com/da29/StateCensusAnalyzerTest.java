@@ -1,7 +1,8 @@
 package com.da29;
 
 /**
- * TC1.5:- Given the State Census CSV File when correct but csv header incorrect Returns a custom Exception
+ * UC2:-   Ability for the analyser to load the Indian States Code Information from a csv
+ * TC1.1:- Given the States Census CSV file, Check to ensure the Number of Record matches
  */
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -16,6 +17,11 @@ public class StateCensusAnalyzerTest {
 	private final String INVALID_CENSUS_CSV_PATH = "IndiaStateCensusData.csv";
 	private final String INVALID_CENSUS_CSV_DELIM = "C:\Users\user\Desktop\CSV\IndiaStateCensusDataDelim.csv";
 	private final String INVALID_CENSUS_CSV_HEAD = "C:\Users\user\Desktop\CSV\IndiaStateCensusDataHead.csv";
+	
+	/**
+	 * Paths for State Code Files
+	 */
+	private final String STATECODE_CSV_PATH="C:\Users\user\Desktop\CSV\IndianStateCode.csv";
 	private StateCensusAnalyzer analyser;
 
 	/**
@@ -28,26 +34,30 @@ public class StateCensusAnalyzerTest {
 		analyser = new StateCensusAnalyzer();
 	}
 
-	@Test
 	/**
-	 * method created for given Census CSV File returns correct number of entries
-	 * otherwise throws exception....
-	 * 
-	 * @throws IOException
+	 * Test Cases For State Census
+	 * @throws StateAnalyzerException
 	 */
-	public void givenCensusCSVFileReturnsCorrectNoOfEntries() throws StateAnalyzerException {
-		int stateCount = analyser.readCSVData(CENSUS_CSV_PATH);
-		assertEquals(28, stateCount);
-	}
+		@Test
+		/**
+		 * method created for given Census CSV File returns correct number of entries
+		 * otherwise throws exception....
+		 * 
+		 * @throws IOException
+		 */
+		public void givenCensusCSVFileReturnsCorrectNoOfEntries() throws StateAnalyzerException {
+			int stateCount = analyser.readStateCensusCSVData(CENSUS_CSV_PATH);
+			assertEquals(28, stateCount);
+		}
 
 	@Test
 	/**
 	 * method created when given incorrect csv file path it will throws custom
 	 * exception invalid File Path
 	 */
-	public void givenIncorrectCSVFilePath_ThrowsCustomExceptionInvalidFilePath() {
+	public void givenIncorrectCSVFilePath_ThrowsCustomExceptionInvalidFilePath(){
 		try {
-			analyser.readCSVData(INVALID_CENSUS_CSV_PATH);
+			analyser.readStateCensusCSVData(INVALID_CENSUS_CSV_PATH);
 		} catch (StateAnalyzerException e) {
 			e.printStackTrace();
 			assertEquals(StateAnalyzerException.ExceptionType.INVALID_FILE_PATH, e.type);
@@ -58,9 +68,9 @@ public class StateCensusAnalyzerTest {
 	/**
 	 * method created for the State Census CSV File when correct but delimiter incorrect Returns a custom Exception
 	 */
-	public void givenIncorrectDelimiter_ThrowsCustomExceptionInvalidDelimiter() {
+	public void givenIncorrectDelimiter_ThrowsCustomExceptionInvalidDelimiter(){
 		try {
-			analyser.readCSVData(INVALID_CENSUS_CSV_DELIM);
+			analyser.readStateCensusCSVData(INVALID_CENSUS_CSV_DELIM);
 		} catch (StateAnalyzerException e) {
 			e.printStackTrace();
 			assertEquals(StateAnalyzerException.ExceptionType.INVALID_DELIM, e.type);
@@ -71,12 +81,24 @@ public class StateCensusAnalyzerTest {
 	/**
 	 * method created for the State Census CSV File when correct but csv header incorrect Returns a custom Exception
 	 */
-	public void givenIncorrectHeader_ThrowsCustomExceptionInvalidHeader() {
+	public void givenIncorrectHeader_ThrowsCustomExceptionInvalidHeader(){
 		try {
-			analyser.readCSVData(INVALID_CENSUS_CSV_HEAD);
+			analyser.readStateCensusCSVData(INVALID_CENSUS_CSV_HEAD);
 		} catch (StateAnalyzerException e) {
 			e.printStackTrace();
 			assertEquals(StateAnalyzerException.ExceptionType.INVALID_HEAD, e.type);
 		}
 	}
+	
+	/**
+	 * Test Cases For State Code
+	 */
+		@Test
+		/**
+		 * method created for given StateCode CSV file returns correct number of entries
+		 */
+		public void givenCodeCSVFileReturnsCorrectNoOfEntries(){
+			int stateCount = analyser.readStateCodeCSVData(STATECODE_CSV_PATH);
+			assertEquals(36, stateCount);
+		}
 }
